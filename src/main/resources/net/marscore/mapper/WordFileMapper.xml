@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.marscore.mapper.WordFileMapper">
+    <resultMap id="WordFile" type="net.marscore.pojo.WordFile" autoMapping="true">
+        <result property="pdfUrl" column="pdf_url"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="gmtModified" column="gmt_modified"/>
+</resultMap>
+    <insert id="insert" parameterType="WordFile">
+        INSERT INTO word_file(url,pdf_url,name) VALUES (#{url},#{pdfUrl},#{name})
+    </insert>
+    <delete id="delete" parameterType="Long">
+        UPDATE word_file SET is_deleted=TRUE WHERE id=#{id}
+    </delete>
+    <update id="update" parameterType="WordFile">
+        UPDATE word_file SET
+            pdf_url=#{pdfUrl},
+            name=#{name},
+            url=#{url}
+        WHERE id=#{id}
+    </update>
+    <select id="select" parameterType="WordFile" resultMap="WordFile">
+        SELECT id,url,pdf_url,name,gmt_created,gmt_modified from word_file
+        WHERE is_deleted=FALSE
+        <if test="id!=null">and id=#{id}</if>
+        <if test="url!=null">and url=#{url}</if>
+        <if test="pdfUrl!=null">and pdf_url=#{pdfUrl}</if>
+        <if test="name!=null">and name=#{name}</if>
+        <if test="gmtCreated!=null">and gmt_created=#{gmtCreated}</if>
+        <if test="gmtModified!=null">and gmt_modified=#{gmtModified}</if>
+    </select>
+</mapper>
